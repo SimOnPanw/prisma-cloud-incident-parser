@@ -16,10 +16,8 @@ def getIncidents(base_url, token, deltaDays = 1):
 
     headers = {"content-type": "application/json; charset=UTF-8", 'Authorization': 'Bearer ' + token }    
     response = requests.get(url, headers=headers)
-
     
     events = response.json()
-
     
     eventFile = open("events.log", "w")
 
@@ -29,26 +27,22 @@ def getIncidents(base_url, token, deltaDays = 1):
                 if ('user' in audit and 'namespace' in audit):
                     output(eventFile, """time="{}", type="{}", hostname="{}", containerName="{}", imageName="{}", user="{}", type="{}", attackType="{}", namespace="{}", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['containerName'], event['imageName'], audit['user'], audit['type'], audit['attackType'], audit['namespace'], audit['msg'] ,audit['attackType'] ) )
                 elif ('user' in audit):
-                    output(eventFile, """time="{}", type="{}", hostname="{}", containerName="{}", imageName="{}", user="{}", type="{}", attackType="{}", namespace=n/a, msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['containerName'], event['imageName'], audit['user'], audit['type'], audit['attackType'], audit['msg'] ,audit['attackType'] ) )
+                    output(eventFile, """time="{}", type="{}", hostname="{}", containerName="{}", imageName="{}", user="{}", type="{}", attackType="{}", namespace="n/a", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['containerName'], event['imageName'], audit['user'], audit['type'], audit['attackType'], audit['msg'] ,audit['attackType'] ) )
                 elif ('namespace' in audit):
-                    output(eventFile, """time="{}", type="{}", hostname="{}", containerName="{}", imageName="{}", user=n/a, type="{}", attackType="{}", namespace="{}", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['containerName'], event['imageName'], audit['type'], audit['attackType'], audit['namespace'], audit['msg'] ,audit['attackType'] ) )
+                    output(eventFile, """time="{}", type="{}", hostname="{}", containerName="{}", imageName="{}", user="n/a", type="{}", attackType="{}", namespace="{}", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['containerName'], event['imageName'], audit['type'], audit['attackType'], audit['namespace'], audit['msg'] ,audit['attackType'] ) )
                 else:                    
-                    output("""time="{}", type="{}", hostname="{}", containerName="{}", imageName="{}", user=n/a, type="{}", attackType="{}", namespace=n/a, msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['containerName'], event['imageName'], audit['type'], audit['attackType'], audit['msg'] ,audit['attackType'] ) )
+                    output("""time="{}", type="{}", hostname="{}", containerName="{}", imageName="{}", user="n/a", type="{}", attackType="{}", namespace="n/a", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['containerName'], event['imageName'], audit['type'], audit['attackType'], audit['msg'] ,audit['attackType'] ) )
             elif (event['type'] == "host"):
                 if ('accountID' in audit ):
                     output(eventFile, """time="{}", type="{}", hostname="{}", category="{}", accountID="{}", user="{}", type="{}", attackType="{}", processPath="{}", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['category'], event['accountID'], audit['user'], audit['type'], audit['attackType'], audit['processPath'], audit['msg'] ,audit['attackType'] ) )
                 else:
-                    output(eventFile, """time="{}", type="{}", hostname="{}", category="{}", accountID=n/a, user="{}", type="{}", attackType="{}", processPath="{}", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['category'], audit['user'], audit['type'], audit['attackType'], audit['processPath'], audit['msg'] ,audit['attackType'] ) )
-
-        
+                    output(eventFile, """time="{}", type="{}", hostname="{}", category="{}", accountID="n/a", user="{}", type="{}", attackType="{}", processPath="{}", msg="{}" """.format(audit['time'], event['type'], event['hostname'], event['category'], audit['user'], audit['type'], audit['attackType'], audit['processPath'], audit['msg'] ,audit['attackType'] ) )   
    
     eventFile.close()            
 
 def output(eventFile, myString):
     eventFile.write("""{}\n""".format(myString) )
     print ("""{}\n""".format(myString) )
-
-
 
 def login(base_url, access_key, secret_key): 
     url = "https://%s/api/v1/authenticate" % ( base_url )
